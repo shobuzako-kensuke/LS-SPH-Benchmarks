@@ -1,0 +1,34 @@
+# VSCodeの設定は追跡しない
+**/.vscode/
+
+# 図，出力結果，中間バイナリディレクトリは追跡しない（paper は論文に載せる図を作成するディレクトリ）
+**/figures/
+**/results/
+**/build/
+**/paper/
+
+# fortran / python の中間バイナリファイルは全て追跡しない
+**/*.mod
+**/*.smod
+**/*.o
+**/__pycache__/
+**/start_calculation
+
+# Windows Zone.Identifier ファイルは追跡しない
+# このファイルの一括削除方法は [https://qiita.com/zakoken/items/61141df6aeae9e3f8e36] を参照
+**/*Zone.Identifier
+
+# LaTeX の中間ファイルは追跡しない
+**/*.aux
+**/*.bbl
+**/*.blg
+**/*.dvi
+**/*.fdb_latexmk
+**/*.fls
+**/*.log
+**/*.out
+**/*.synctex.gz
+**/*.toc
+**/*.idx
+**/*.ind
+**/*.ilg
