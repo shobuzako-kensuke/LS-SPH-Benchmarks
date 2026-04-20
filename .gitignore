@@ -1,24 +1,27 @@
-# VSCodeの設定は追跡しない
+# Ignore VSCode settings
 **/.vscode/
 
-# 図，出力結果，中間バイナリディレクトリは追跡しない（paper は論文に載せる図を作成するディレクトリ）
+# Ignore calculation results and figures
 **/figures/
 **/results/
-**/build/
 **/paper/
 
-# fortran / python の中間バイナリファイルは全て追跡しない
+# Ignore build directories and intermediate files
+**/build/
 **/*.mod
-**/*.smod
 **/*.o
+
+# Ignore Python cache files
 **/__pycache__/
+
+# Ignore the compiled executable file
 **/start_calculation
 
-# Windows Zone.Identifier ファイルは追跡しない
-# このファイルの一括削除方法は [https://qiita.com/zakoken/items/61141df6aeae9e3f8e36] を参照
+# Ignore Windows Zone.Identifier files
+# See [https://qiita.com/zakoken/items/61141df6aeae9e3f8e36]
 **/*Zone.Identifier
 
-# LaTeX の中間ファイルは追跡しない
+# Ignore LaTeX intermediate files
 **/*.aux
 **/*.bbl
 **/*.blg

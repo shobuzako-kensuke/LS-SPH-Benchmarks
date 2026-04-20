@@ -6,6 +6,8 @@ program main
     use input
     use global_variables
 
+    call omp_set_num_threads(OMP_THREADS)
+    
     !=========================!
     !  local variables        !
     !=========================!
