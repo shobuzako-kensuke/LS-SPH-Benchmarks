@@ -1,104 +1,168 @@
+! ============================================================================ !
+!                                                                              !
+!                              LS-SPH-Benchmarks                               !
+!                                                                              !
+!                     Copyright (c) 2026 Kensuke SHOBUZAKO                     !
+!               This program is licensed under the MIT License.                !
+!                                                                              !
+!                              ~~ Description ~~                               !
+!  This main program file orchestrates the overall flow of the SPH simulation. !
+!                                                                              !
+! ============================================================================ !
+
+#include "../config.h"
+
 program main
-    !=========================!
-    !  module                 !
-    !=========================!
-    !$use omp_lib
-    use input
-    use global_variables
 
-    call omp_set_num_threads(OMP_THREADS)
-    
-    !=========================!
-    !  local variables        !
-    !=========================!
+    ! ======================================================================== !
+    !   1. Libraries & Modules
+    ! ======================================================================== !
+    use omp_lib
+    use global_types            , only: Param_type, SP_type, VM_type, Cell_type
+    use init_param_mod          , only: init_param
+    use check_param_mod         , only: check_param
+    use init_particle_mod       , only: init_particle
+    use init_virtual_markers_mod, only: init_virtual_markers
+    use init_cell_mod           , only: init_cell
+    use update_cell_mod         , only: update_cell
+    use RK2_mod                 , only: RK2
+    use RK4_mod                 , only: RK4
+    use PST_mod                 , only: PST
+    use check_steady_state_mod  , only: check_steady_state
+    use write_param_mod         , only: write_param
+    use write_data_mod          , only: write_data
+    use write_init_info_mod     , only: write_init_info
+    use write_progress_mod      , only: write_progress
     implicit none
-    character(len=999) :: Nx_ID, x_rand_ID, save_step
-    integer :: i, j
-    real(8) :: omp_get_wtime
 
-    write(*,*) '+ ------------------------------------------------------------------------ +'
-    write(*,*) '[message] Calculation has started.'
-    !$ start_time = omp_get_wtime()
+    ! ======================================================================== !
+    !   2. Variable Declarations
+    ! ======================================================================== !
+    type(Param_type) :: param   ! Simulation parameters
+    type(SP_type)    :: SP      ! Smoothed Particles (SP) data
+    type(VM_type)    :: VM      ! Virtual Markers (VM) data
+    type(Cell_type)  :: cell    ! Cell linked list data
 
-    !=========================!
-    !  main program           !
-    !=========================!
-    call check_options                  ! check compilation options
+    integer          :: step, is_steady, loop_start, log_interval
+    double precision :: wtime_start, wtime_current  ! Wall-clock time
+
+    ! ======================================================================== !
+    !   3. Parameter Initialization & Check
+    ! ======================================================================== !
+    ! Initialize the simulation parameters (`param`)
+    call init_param(param)
+
+    ! Check `param` defined by the user
+    call check_param(param)
+
+    ! ======================================================================== !
+    !   4. OpenMP Setup
+    ! ======================================================================== !
+    ! Set up the number of threads in OpenMP
+    call omp_set_dynamic(.false.)
+    call omp_set_num_threads(param%omp_threads)
+
+    ! ======================================================================== !
+    !   5. Particle Initialization
+    ! ======================================================================== !
+    ! Initialize the internal fluid particles and external ghost wall particles
+    ! This subroutine drives the following three tasks:
+    !    - (1) Set particle positions
+    !    - (2) Classify the particle types
+    !    - (3) Impose the initial conditions
+    call init_particle(param, SP)
+
+    ! Initialize the virtual markers used in the multi-layer ghost particle scheme
+#if (WALL_MODEL <= 3)
+    call init_virtual_markers(param, SP, VM)
+#endif
+
+    ! ======================================================================== !
+    !   6. Cell Initialization
+    ! ======================================================================== !
+    ! Initialize the cell list
+    call init_cell(param, SP, VM, cell)
+    call update_cell(param, SP, cell)
+
+    ! ======================================================================== !
+    !   7. Export Simulation Setup & Fundamental Data
+    ! ======================================================================== !
+    ! Write parameters and data into the `results/SAVE_NAME/config/` directory
+    if (trim(adjustl(param%read_name)) == "new") then
+        call write_param(param, SP, VM, cell)
+        call write_data(0, param, SP)
+    endif
+
+    ! Write initial information to the terminal and log file
+    call write_init_info(param, SP)
+
+    ! ======================================================================== !
+    !   8. Setup for Time Loop
+    ! ======================================================================== !
+    ! Determine the starting step
+    if (trim(adjustl(param%read_name)) == "new") then
+        loop_start = param%start_step
+    else
+        loop_start = param%start_step + 1
+    endif
+
+    ! Record the wall-clock start time
+    wtime_start = omp_get_wtime()
+
+    ! Setup for the progress bar
+    log_interval = max(param%total_step/100, 1)
     
-    do i = 1, size(Nx_set)
-        do j = 1, size(x_rand_set)
 
-            !=========================!
-            !  fix parameters         !
-            !=========================!
-            Nx = Nx_set(i)                  ! fix Nx
-            x_rand = x_rand_set(j)          ! fix x_rand
-            write(Nx_ID,*) Nx
-            write(x_rand_ID,'(F3.1)') x_rand
-            save_name = 'Nx'//trim(adjustl(Nx_ID))//'_E'//trim(adjustl(x_rand_ID))//'_' &
-                        //trim(adjustl(model_name))
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> !
+    !   9. Time Loop
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> !
+    do step = loop_start, param%end_step
 
-            !=========================!
-            !  initial setting        !
-            !=========================!
-            call out_input                      ! copy input file
-            call set_system                     ! initial setting
-            call set_background_cell            ! set background cell
-            call cal_background_cell            ! cal background cell
-            call cal_density                    ! cal density
-#if defined(VM_ON)
-            call cal_VM_to_WL                   ! cal virtual marker and wall
+        ! ==================================================================== !
+        !   9-1. Time Integration using the Runge-Kutta method
+        ! ==================================================================== !
+#if   (RK == 2)
+        call RK2(param, SP, VM, cell)  ! Using 2nd-order RK
+#elif (RK == 4)
+        call RK4(param, SP, VM, cell)  ! Using 4th-order RK
 #endif
-            call out_system_info                ! output system info
-            call out_data('0')                  ! output initial setting
-
-            !=========================!
-            !  main loop              !
-            !=========================!
-            step = 0  ! zero clear
-
-            do
-                step = step + 1
-                !=========================!
-                !  SPH calculation        !
-                !=========================!
-                call cal_diffusion              ! calculate diffusion equation
-
-                !=========================!
-                !  check iteration        !
-                !=========================!
-                dif_f(:) = abs(SP_f_next(:) - SP_f(:N_inn))
-                residual_max = maxval(dif_f)
-
-                if (residual_max < threshold) then
-                    write(save_step,*) step
-                    call out_data(trim(adjustl(save_step)))  ! save
-                    write(*,*) '[message] Calculation has finished.'
-                    write(*,*) '+ ------------------------------------------------------------------------ +'
-                    write(*,*) ''
-                    exit
-
-                else
-                    SP_f(:N_inn) = SP_f_next(:)
-#if defined(VM_ON)
-                    call cal_VM_to_WL
+        ! ==================================================================== !
+        !   9-2. Particle Shifting Technique
+        ! ==================================================================== !
+#if (TARGET_PROBLEM != 1)
+        call PST(param, SP, VM, cell)
 #endif
 
-                    if (mod(step, write_step) == 0) then     ! save
-                    write(save_step,*) step
-                        call out_data(trim(adjustl(save_step)))
-                    endif
+        ! ==================================================================== !
+        !   9-3. Check if the simulation reaches a steady state
+        ! ==================================================================== !
+#if (TARGET_PROBLEM == 1)
+        call check_steady_state(is_steady, param, SP)
 
-                    !$ tmp_time = omp_get_wtime()  ! get temporary CPU time
-                    call out_progress              ! progress bar
-                endif
-            enddo
+        if (is_steady == 1) then
+            write(*,*) "  Reached a steady state at step: ", step
+            call write_data(step, param, SP)
+            wtime_current = omp_get_wtime()
+            call write_progress(step, param, wtime_start, wtime_current)
+            exit
+        endif
+#endif
 
-            call deallocate_array
+        ! ==================================================================== !
+        !   9-4. Export data to `results/SAVE_NAME/data/step.dat`
+        ! ==================================================================== !
+        if (mod(step, param%write_step) == 0) then
+            call write_data(step, param, SP)
+        endif
 
-        enddo
+        ! ==================================================================== !
+        !   9-5. Log
+        ! ==================================================================== !
+        if (mod(step, log_interval) == 0 .or. step == param%end_step) then
+            wtime_current = omp_get_wtime()
+            call write_progress(step, param, wtime_start, wtime_current)
+        endif
+
     enddo
 
 end program main
-
-! END !
