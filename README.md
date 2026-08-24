@@ -2,18 +2,19 @@
 
 # LS-SPH-Benchmarks <!-- omit in toc -->
 
+<p align="center">
+  This repository provides various benchmark programs using the <strong>Least-Squares Smoothed Particle Hydrodynamics (LS-SPH)</strong> method, a high-accuracy mesh-free method.
+</p>
+
 <img src="materials/images/CF_TG_OD.png" alt="Logo" width="100%">
 
 <br>
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19181862.svg)](https://doi.org/10.5281/zenodo.19181862)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Fortran](https://img.shields.io/badge/Fortran-Intel%20ifx-734f96?style=for-the-badge&logo=fortran&logoColor=white)]()
+[![Intel Fortran](https://img.shields.io/badge/Fortran-Intel%20ifx-734f96?style=for-the-badge&logo=fortran&logoColor=white)]()
+[![GNU Fortran](https://img.shields.io/badge/Fortran-GNU%20gfortran-734f96?style=for-the-badge&logo=fortran&logoColor=white)]()
 [![Python](https://img.shields.io/badge/Python-3.12%2B-blue?style=for-the-badge&logo=python&logoColor=white)]()
-
-<p align="center">
-  This repository provides various benchmark programs using the <strong>Smoothed Particle Hydrodynamics (SPH)</strong> method, a mesh-free method, and its high-accuracy variant, the <strong>Least-Squares SPH (LS-SPH)</strong> method.
-</p>
 
 [**日本語版はこちら**](README_ja.md)
 
@@ -21,53 +22,54 @@
 
 
 ## Table of Contents <!-- omit in toc -->
-- [🔥 Implemented Benchmark Programs](#-implemented-benchmark-programs)
+- [🔥 Implemented Benchmark Programs (All 2D)](#-implemented-benchmark-programs-all-2d)
 - [⚙️ System Requirements](#️-system-requirements)
 - [🖥️ Usage](#️-usage)
   - [1. Download this repository](#1-download-this-repository)
   - [2. Run the calculation](#2-run-the-calculation)
   - [3. Visualize and analyze the results](#3-visualize-and-analyze-the-results)
+- [📖 Documentation](#-documentation)
 - [📁 Directory Structure](#-directory-structure)
 - [🧑‍💻 Citation](#-citation)
 - [🪪 License](#-license)
 
 <br>
 
-## 🔥 Implemented Benchmark Programs
+## 🔥 Implemented Benchmark Programs (All 2D)
 
-- **Verification: Comparison with analytical solutions**
-  - 2D diffusion equation test to verify wall boundary treatments
-  - Taylor–Green vortex flow
-- **Validation: Fluid benchmark tests**
-  - Lid-driven cavity flow
-  - Boussinesq convection
+- **Verification**: Comparison with analytical solutions
+  - Diffusion Equation Test
+  - Taylor–Green Vortex Flow
+- **Validation**: Fluid benchmark tests
+  - Lid-driven Cavity Flow
+  - Boussinesq Convection (Bottom-heated)
 
 
-| Taylor–Green vortex | Lid-driven cavity flow | Boussinesq convection |
+<!-- | Taylor–Green vortex | Lid-driven cavity flow | Boussinesq convection |
 | :---: | :---: | :---: |
-| <img src="" alt="Taylor-Green vortex" width="300"> | <img src="" alt="Cavity flow" width="300"> | <img src="" alt="Boussinesq convection" width="300"> |
+| <img src="materials/images/" alt="Taylor-Green vortex" width="300"> | <img src="" alt="Cavity flow" width="300"> | <img src="" alt="Boussinesq convection" width="300"> | -->
 
 <br>
 
 ## ⚙️ System Requirements
 
-The core calculations are performed using **Intel Fortran**, while data analysis and visualization are handled using **Python**.
+The SPH calculations are performed with **Fortran** (supported both Intel and GNU Fortran), while data analysis and visualization are handled by **Python**.
 
 | Category | Requirement | Notes |
 | :--- | :--- | :--- |
-| **OS** | Unix-like OS | Tested on Windows Subsystem for Linux (WSL). |
-| **Compiler** | Intel Fortran | Tested with `ifx` (default). |
-| **Build system** | Make | Used to compile the Fortran source code. |
-| **Visualization** | Python | Tested with Python 3.12.0 (which requires `matplotlib`, `numpy`, etc.). |
-| **Animation**| `ffmpeg` | Required by the Python scripts to generate animations. |
+| **OS** | Unix-like OS | Tested on Windows Subsystem for Linux (WSL) |
+| **Compiler** | Intel Fortran / GNU gortran | Tested with `ifx` (default) and `gfortran` |
+| **Libraries** | MKL or LAPACK/BLAS | Required for matrix operations in the LS-SPH solver |
+| **Build system** | Make | Used to compile the Fortran source code |
+| **Visualization** | Python | Tested with `Python 3.12.0` |
 
 > [!TIP]
-> - Guides on installing WSL and setting up Intel Fortran/Python environments are available on my Qiita blog (in Japanese):
+> - Guides on installing WSL and setting up Intel Fortran and Python environments are available on my Qiita blog (in Japanese):
 >     - [WSL2のインストールとアンインストール](https://qiita.com/zakoken/items/61141df6aeae9e3f8e36)
 >     - [WSL2によるgfortranとintel fortranの環境構築](https://qiita.com/zakoken/items/2a5e629020ce68f3efe1)
 >     - [WSL2によるPython3の環境構築](https://qiita.com/zakoken/items/8ddfda7267e7d95b3c46)
-> 
-> - If `ffmpeg` is not installed, run `sudo apt install ffmpeg` in your terminal.
+>
+> - If `gfortran` is used, please ensure LAPACK and BLAS are installed (e.g., `sudo apt install liblapack-dev libblas-dev`).
 
 <br>
 
@@ -77,18 +79,45 @@ The core calculations are performed using **Intel Fortran**, while data analysis
 - Run the `git clone` command or download this repository as a ZIP file to your local machine.
 
 ### 2. Run the calculation
-1. Set up the parameters, including the target problem and the SPH solver, in `config.h`.
+1. Set up the parameters, including the target problem and the SPH solver, in [config.h](/config.h).
 2. Run `make` to build the Fortran source code.
-3. After completing the build, run `./start_calculation` to start the calculation.
+3. Run `./start_calculation` to start the calculation.
 
 > [!NOTE]
-> The calculation results (binary files) are automatically stored in the `results/` directory.
+> - The calculation results (binary files) are automatically stored in the `results/` directory.
+> - Details on the implemented benchmark tests and recommended parameters are provided in [materials/documents/benchmarks_detail.md](/materials/documents/benchmarks_detail.md).
+> - Details of each parameter in [config.h](config.h) are provided in [materials/documents/config_guide.md](/materials/documents/config_guide.md).
 
 ### 3. Visualize and analyze the results
-- Select the target data in `analysis_main.py` and run the script.
+- Before running the analysis script, set up the Python virtual environment and install the required libraries.
+  1. Create and activate a virtual environment
+      ```bash
+      python3 -m venv .venv
+      source .venv/bin/activate
+      ```
+  2. Install the dependencies
+      ```bash
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      ```
+- Open [analyze.py](/analyze.py), configure the `SAVE_NAME` and other settings, and then run the script:
+    ```bash
+    python analyze.py
+    ```
 
 > [!NOTE]
-> The output figures and animations are automatically stored in the `figures/` directory.
+> - The output figures and animations are automatically stored in the `figures/` directory.
+> - To deactivate the virtual environment, run `deactivate`.
+
+<br>
+
+## 📖 Documentation
+
+Detailed guides and theoretical backgrounds are provided in the [materials/documents/](/materials/documents/) directory.
+
+- **[benchmarks_detail.md](/materials/documents/benchmarks_detail.md)**: Detailed explanations of the implemented benchmark tests and recommended parameters.
+- **[config_guide.md](/materials/documents/config_guide.md)**: A comprehensive guide on the physical meaning and usage of each parameter in [config.h](/config.h).
+- **[theory_manual.pdf](/materials/documents/theory_manual.pdf)**: The theoretical manual detailing the discretization, implemented algorithm, and analytical solutions of benchmarks.
 
 <br>
 
@@ -96,42 +125,37 @@ The core calculations are performed using **Intel Fortran**, while data analysis
 
 ```
 LS-SPH-Benchmarks/
-├── analysis/              # Python analysis scripts 
+├── analysis/              # Python analysis scripts
+│   ├── benchmarks/        # Analysis script for each benchmarks
+│   └── common/            # Analysis tools
 ├── materials/             # Project materials
 │   ├── documents/         # Program documentation
 │   └── images/            # Images for README
 ├── source/                # Fortran source code
 │   ├── boundary/          # Boundary treatment
-│   ├── check/             # Error checking
-│   ├── core/              # Core definitions
-│   ├── equation/          # Governing equations
-│   ├── integrator/        # Time marching schemes
+│   ├── check/             # Checking
+│   ├── core/              # Fundamental types and kernel functions
+│   ├── equation/          # Governing equations & Time integrator
 │   ├── io/                # Input/Output operations
-│   ├── kernel/            # Kernel functions
 │   ├── neighbor/          # Neighbor particle search
 │   ├── setup/             # Problem setup and initialization
 │   ├── shifting/          # Particle shifting
-│   ├── solver/            # SPH solvers
 │   └── main.f90           # Main program
 ├── .gitignore             # Git ignore file
-├── analysis_main.py       # Main analysis script
+├── analyze.py             # Main analysis script
 ├── CHANGELOG.md           # Version history
 ├── CITATION.cff           # Citation information
 ├── config.h               # Configuration header file
-├── CONTRIBUTORS.md        # Repository contributors
 ├── initialize.py          # Initialization script
-├── input.f90              # Input setting file
 ├── LICENSE                # License
 ├── Makefile               # Build instructions
 ├── README.md              # This document (English)
-└── README_ja.md           # This document (Japanese)
+├── README_ja.md           # This document (Japanese)
+└── requirements.txt       # Python dependencies
 ```
 
 > [!NOTE]
 > The following directories are **automatically** generated when building and running the program: `build/` (for intermediate binary files), `results/` (for calculation data), and `figures/` (for generated figures and animations).
-
-> [!TIP]
-> Details on each program file are provided in `materials/documents/`.
 
 <br>
 
