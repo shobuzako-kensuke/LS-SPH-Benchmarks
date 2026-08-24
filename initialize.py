@@ -1,42 +1,90 @@
-#=========================#
-#  module                 #
-#=========================#
-import glob
-import os
+# ============================================================================ #
+#                                                                              #
+#                              LS-SPH-Benchmarks                               #
+#                                                                              #
+#                     Copyright (c) 2026 Kensuke SHOBUZAKO                     #
+#               This program is licensed under the MIT License.                #
+#                                                                              #
+#                              ~~ Description ~~                               #
+#     This script initializes the repository by deleting generated files,      #
+#        such as calculation results, figures, and intermediate files.         #
+#                                                                              #
+# ============================================================================ #
+
 import shutil
-#=========================#
-#  settings               #
-#=========================#
-path_output  = []
-path_fig     = []
-path_mod     = []
-path_o       = []
-path_pycache = []
-path_exe     = []
-#=========================#
-#  PATH                   #
-#=========================#
-ans = input('Initialize this directory ? [y/n]: ')
-if (ans == 'yes' or ans == 'y'):
-    path_output  += glob.glob('./output')
-    path_fig     += glob.glob('./fig')
-    path_mod     += glob.glob('./source_code/*.mod')
-    path_o       += glob.glob('./source_code/*.o'  )
-    path_pycache += glob.glob('./source_code/__pycache__')
-    path_exe     += glob.glob('./source_code/start_calculation')
+import sys
+from pathlib import Path
 
-path_all = path_output + path_fig + path_mod + path_o + path_pycache + path_exe
-#=========================#
-#  remove                 #
-#=========================#
-for i in path_all:
+def main():
+    # ======================================================================== #
+    #   User input
+    # ======================================================================== #
+    print("+ ======================================================== +")
+    print("|   LS-SPH-Benchmarks Initialization Tool                  |")
+    print("+ ======================================================== +")
+    print("   This script will delete the following generated items:")
+    print("      - build/            (Intermediate binary files)")
+    print("      - results/          (Calculation data)")
+    print("      - figures/          (Generated figures and animations)")
+    print("      - start_calculation (Executable file)")
+    print("      - ipo_out.optrpt    (Optimization report)")
+    print("      - **/__pycache__/   (Python cache files)")
 
-    # directory
-    if os.path.isdir(i):
-        shutil.rmtree(i)  # remove directory recursively
+    print("+ ======================================================== +")
+    ans = input("   Initialize this directory? [y/n]: ").strip().lower()
 
-    # file
-    if os.path.isfile(i):
-        os.remove(i)      # remove file
-            
-# END #
+    # ======================================================================== #
+    #   [ No ] Exit this program
+    # ======================================================================== #
+    if ans not in ["y", "yes"]:
+        print("   Initialization is canceled.")
+        print("+ ======================================================== +")
+        sys.exit()
+
+    # ======================================================================== #
+    #   [ Yes ] Run the initialization 
+    # ======================================================================== #
+    # Get the root directory (absolute directory)
+    root_dir = Path(__file__).resolve().parent
+    
+    # Get the target paths
+    targets = [
+        root_dir / "build",
+        root_dir / "results",
+        root_dir / "figures",
+        root_dir / "start_calculation",
+        root_dir / "start_calculation.exe",
+        root_dir / "ipo_out.optrpt"
+    ]
+
+    # Search "__pycache__" in `analysis` directory and add them to `targets`
+    targets.extend(root_dir.glob("analysis/**/__pycache__"))
+
+    # Delete
+    count = 0
+    for target in targets:
+        if target.exists():
+            rel_path = target.relative_to(root_dir)  # Relative path from `root_dir`
+
+            # If directory:
+            if target.is_dir():
+                shutil.rmtree(target)  # Delete the directory recursively
+                print(f"      - Delete directory: {rel_path}/")
+
+            # If file:
+            elif target.is_file():
+                target.unlink()        # Delete the file
+                print(f"      - Delete file     : {rel_path}")
+
+            count += 1
+
+    print("+ ======================================================== +")
+    
+    if count == 0:
+        print("   No generated files found. The directory is already cleaned.")
+    else:
+        print("   Initialization completed successfully!")
+
+
+if __name__ == "__main__":
+    main()
