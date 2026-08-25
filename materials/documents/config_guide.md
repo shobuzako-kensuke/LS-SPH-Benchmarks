@@ -6,6 +6,8 @@ The Fortran code must be recompiled (`make`) after [`config.h`](/config.h) is ch
 本ドキュメントは [`config.h`](/config.h) に定義されているパラメータの解説書です．  
 [`config.h`](/config.h) の内容を変更した場合，必ずFortranコードを再コンパイル（`make`）してください．
 
+<br>
+
 > [!NOTE]
 > - For the recommended settings for each benchmark test, see [/materials/documents/benchmarks_detail.md](/materials/documents/benchmarks_detail.md).  
 各ベンチマークテストにおける推奨設定は [/materials/documents/benchmarks_detail.md](/materials/documents/benchmarks_detail.md) をご参照ください．
@@ -126,14 +128,16 @@ Configure parameters for the time integration scheme (Runge-Kutta method), inclu
 > [!NOTE]
 > The effective time step $\Delta t$ is determined by the following equation.  
 > 実効的な時間刻み幅 $\Delta t$ は次式により決定されます．
+> 
 > $$
-> \Delta t = \min \left( \text{COE\_CFL} \times \frac{\Delta x}{c/(\zeta \xi)} \, , \, \text{COE\_DIF} \times \frac{(\Delta x)^2}{\nu / \xi^2} \, , \, \text{COE\_DIF} \times \frac{(\Delta x)^2}{\kappa} \right) \, ,
+> \Delta t = \min \left( \mathrm{COE \\_ CFL} \times \frac{\Delta x}{c/(\zeta \xi)} , \quad \mathrm{COE \\_ DIF} \times \frac{(\Delta x)^2}{\nu / \xi^2} , \quad \mathrm{COE \\_ DIF} \times \frac{(\Delta x)^2}{\kappa} \right) ,
 > $$
-> where $\Delta x$ is the uniform particle spacing, $c \coloneqq \sqrt{K/\rho}$ is the speed of sound ($K$ is the bulk modulus and $\rho$ is the density), $\nu$ is the kinematic viscosity, $\kappa$ is the thermal diffusivity, and $\zeta$ and $\xi$ are the relaxation parameters for the Reduced Speed of Sound Technique (RSST) and the Variable Inertial Method (VIM), respectively.  
-> ここで，$\Delta x$ は一様配置時における粒子間隔，$c \coloneqq \sqrt{K/\rho}$ は音速 ($K$は体積弾性率，$\rho$は密度)，$\nu$ は動粘性率，$\kappa$ は熱拡散率，$\zeta, \xi$ はそれぞれ音速低減法 (RSST) および慣性変化法 (VIM) の緩和パラメータを表します．
+> 
+> where $\Delta x$ is the uniform particle spacing, $c = \sqrt{K/\rho}$ is the speed of sound ($K$ is the bulk modulus and $\rho$ is the density), $\nu$ is the kinematic viscosity, $\kappa$ is the thermal diffusivity, and $\zeta$ and $\xi$ are the relaxation parameters for the Reduced Speed of Sound Technique (RSST) and the Variable Inertial Method (VIM), respectively.  
+> ここで， $\Delta x$ は一様配置時における粒子間隔， $c = \sqrt{K/\rho}$ は音速 ($K$は体積弾性率， $\rho$は密度)， $\nu$ は動粘性率， $\kappa$ は熱拡散率， $\zeta, \xi$ はそれぞれ音速低減法 (RSST) および慣性変化法 (VIM) の緩和パラメータを表します．
 
 > [!NOTE]
-> Details of the RSST and VIM are provided in [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf).
+> Details of the RSST and VIM are provided in [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf).  
 > RSST および VIM の詳細は [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf) をご参照ください．
 
 <br>
@@ -166,17 +170,19 @@ Specify additional simulation parameters.
 | Parameter | Description (English) | Description (日本語) |
 | :--- | :--- | :--- |
 | `GRAVITY` | Magnitude of the gravitational acceleration (m/s^2) | 重力加速度の大きさ (m/s^2) |
-| `POS_PERT` | Magnitude of the positional perturbation for the Diffusion Equation Test ($0 \leq \text{POS\_PERT} < 0.5$) | 拡散方程式テストにおける初期粒子配置の摂動の大きさ ($0 \leq \text{POS\_PERT} < 0.5$) |
+| `POS_PERT` | Magnitude of the positional perturbation for the Diffusion Equation Test ($0 \leq \mathrm{POS\\_PERT} < 0.5$) | 拡散方程式テストにおける初期粒子配置の摂動の大きさ ($0 \leq \mathrm{POS\\_PERT} < 0.5$) |
 | `TG_A`, `TG_B` | Number of vortices in the X and Y directions of Taylor-Green Vortex | Taylor-Green Vortex におけるX方向およびY方向の渦の数 |
 
 > [!NOTE]
-> The initial particle position $\boldsymbol{x}$ for the Diffusion Equation Test is determined by the following equation.  
-> 拡散方程式テストの初期粒子配置 $\boldsymbol{x}$ は次式により決定されます．
+> The initial particle position $\vec{x}$ for the Diffusion Equation Test is determined by the following equation.  
+> 拡散方程式テストの初期粒子配置 $\vec{x}$ は次式により決定されます．
+> 
 > $$
-> \boldsymbol{x} = \boldsymbol{x}_{0} + (\epsilon \Delta x) \boldsymbol{e} \, ,
+> \vec{x} = \vec{x} \_ {0} + (\epsilon \Delta x) \vec{e} ,
 > $$
-> where $\boldsymbol{x}_{0}$ is the uniform particle position, $\epsilon = \text{POS\_PERT}$ is the magnitude of the positional perturbation, $\Delta x$ is the uniform particle spacing, and $\boldsymbol{e}$ is a 2D random vector whose components range from $-1$ to $1$.  
-> ここで，$\boldsymbol{x}_{0}$ は一様配置時の粒子位置，$\epsilon = \text{POS\_PERT}$ は位置摂動の大きさ，$\Delta x$ は一様配置時の粒子間隔，$\boldsymbol{e}$は各要素の値が$-1$から$1$の間をランダムに取る2次元ベクトルをそれぞれ表します．
+> 
+> where $\vec{x} \_ {0}$ is the uniform particle position, $\epsilon = \mathrm{POS \\_ PERT}$ is the magnitude of the positional perturbation, $\Delta x$ is the uniform particle spacing, and $\vec{e}$ is a 2D random vector whose components range from $-1$ to $1$.  
+> ここで， $\vec{x} \_ {0}$ は一様配置時の粒子位置， $\epsilon = \mathrm{POS \\_ PERT}$ は位置摂動の大きさ， $\Delta x$ は一様配置時の粒子間隔， $\vec{e}$は各要素の値が $-1$ から $1$ の間をランダムに取る2次元ベクトルをそれぞれ表します．
 
 <br>
 
@@ -187,18 +193,20 @@ Define the smoothing length $h$, the shifting coefficient for the Particle Shift
 
 | Parameter | Description (English) | Description (日本語) |
 | :--- | :--- | :--- |
-| `COE_H` | Coefficient of the smoothing length ($h = \text{COE\_H} \times \Delta x$) | スムージング長の係数 ($h = \text{COE\_H} \times \Delta x$)|
+| `COE_H` | Coefficient of the smoothing length ($h = \mathrm{COE \_ H} \times \Delta x$) | スムージング長の係数 ($h = \mathrm{COE \_ H} \times \Delta x$)|
 | `PST_C` | Shifting coefficient for the Particle Shifting Technique (PST) | 粒子再配列法 (PST) のシフト係数 |
 | `COE_DELTA_SPH` | Coefficient of the density diffusion term (Recommended for $\delta$-SPH: 0.1) | 密度拡散項の係数 ($\delta$-SPH法における推奨値: 0.1)|
 
 > [!NOTE]
-> The particle shift $\Delta \boldsymbol{x}$ in the internal region is determined by the following equation.  
-> 内部領域の粒子シフト $\Delta \boldsymbol{x}$ は次式により決定されます．
+> The particle shift $\Delta \vec{x}$ in the internal region is determined by the following equation.  
+> 内部領域の粒子シフト $\Delta \vec{x}$ は次式により決定されます．
+> 
 > $$
-> \Delta \boldsymbol{x} = - (\text{PST\_C} \times U_{\max} \Delta t) \sum_{j} h V_{j} \left\{1 + 0.2 \left(\frac{W(|\boldsymbol{x}_{ij}|; h)}{W(\Delta x; h)}\right)^4 \right\} \nabla_{i} W(|\boldsymbol{x}_{ij}|; h) \, ,
+> \Delta \vec{x} = - (\mathrm{PST \\_ C} \times U \_ {\max} \Delta t) \sum \_ {j} h V \_ {j} \left\\{ 1 + 0.2 \left(\frac{W(|\boldsymbol{x} \_ {ij}|; h)}{W(\Delta x; h)}\right)^4 \right\\} \nabla \_ {i} W(|\boldsymbol{x} \_ {ij}|; h) ,
 > $$
-> where $U_{\max}$ is the maximum velocity in the system, $\Delta t$ is the time step, $h$ is the smoothing length, $V_{j}$ is the volume of the neighboring particle $j$, $W(|\boldsymbol{x}_{ij}|; h)$ is the value of the kernel function for the distance between particle $i$ and its neighbor $j$ with the smoothing length $h$, and $\Delta x$ is the uniform particle spacing.  
-> ここで，$U_{\max}$ は系の最大速度，$\Delta t$ は時間刻み幅，$h$ はスムージング長，$V_{j}$ は近傍粒子$j$の体積，$W(|\boldsymbol{x}_{ij} |; h)$ は粒子$i$と近傍粒子$j$の距離および$h$に関するカーネル関数の値，$\Delta x$ は一様配置時における粒子間隔をそれぞれ表します．
+> 
+> where $U \_ {\max}$ is the maximum velocity in the system, $\Delta t$ is the time step, $h$ is the smoothing length, $V \_ {j}$ is the volume of the neighboring particle $j$, $W(|\vec{x} \_ {ij}|; h)$ is the value of the kernel function for the distance between particle $i$ and its neighbor $j$ with the smoothing length $h$, and $\Delta x$ is the uniform particle spacing.  
+> ここで， $U \_ {\max}$ は系の最大速度， $\Delta t$ は時間刻み幅，$h$ はスムージング長， $V \_ {j}$ は近傍粒子$j$の体積， $W(|\vec{x} \_ {ij} |; h)$ は粒子 $i$ と近傍粒子 $j$ の距離および $h$ に関するカーネル関数の値， $\Delta x$ は一様配置時における粒子間隔をそれぞれ表します．
 
 > [!NOTE]
 > Details of the PST and $\delta$-SPH method are provided in [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf).  
