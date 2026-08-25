@@ -5,7 +5,7 @@ authors:
   given-names: "Kensuke"
   orcid: "https://orcid.org/0009-0000-4453-5398"
 title: "LS-SPH-Benchmarks"
-version: 0.1.0
+version: 1.0.0
 doi: "10.5281/zenodo.19181862"
 date-released: 2026-04-20
 url: "https://doi.org/10.5281/zenodo.19181862"

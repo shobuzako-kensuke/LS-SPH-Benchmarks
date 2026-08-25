@@ -1,10 +1,10 @@
 # Ignore VSCode settings
 **/.vscode/
 
-# Ignore calculation results and figures
+# Ignore calculation results, figures, research directories 
 **/figures/
 **/results/
-**/paper/
+**/research/
 
 # Ignore build directories and intermediate files
 **/build/
@@ -16,12 +16,18 @@
 
 # Ignore the compiled executable file
 **/start_calculation
+**/start_calculation.exe
+
+# Ignore Intel Fortran optimization reports
+**/*.optrpt
 
 # Ignore Windows Zone.Identifier files
 # See [https://qiita.com/zakoken/items/61141df6aeae9e3f8e36]
 **/*Zone.Identifier
 
-# Ignore LaTeX intermediate files
+# Ignore LaTeX source code and intermediate files
+**/*.tex
+**/*.bib
 **/*.aux
 **/*.bbl
 **/*.blg
@@ -35,3 +41,6 @@
 **/*.idx
 **/*.ind
 **/*.ilg
+
+# Ignore virtual environment
+.venv/
