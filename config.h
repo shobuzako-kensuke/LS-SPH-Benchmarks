@@ -17,7 +17,7 @@
 /* ============================================================================ */
 /*   Options:                                                                   */
 /*       1 : Diffusion Equation Test                                            */
-/*       2 : Taylor-Green Vortex Flow                                           */
+/*       2 : Taylor-Green Vortex                                                */
 /*       3 : Lid-driven Cavity Flow                                             */
 /*       4 : Boussinesq Convection (Bottom-heated)                              */
 /* ============================================================================ */
@@ -63,7 +63,7 @@
 
 
 /* ============================================================================ */
-/*   4. File & Input/Output Settings                                            */
+/*   4. Input/Output Settings                                                   */
 /* ============================================================================ */
 /* Output directory name [String]                                               */
 #define SAVE_NAME "tg_compare_100_write"
@@ -154,7 +154,7 @@
 /* Positional perturbation for the diffusion equation test [Double precision]   */
 #define POS_PERT 0.0d0
 
-/* Number of vortices for Taylor-Green vortex flow [Integer]                    */
+/* Number of vortices for Taylor-Green vortex [Integer]                         */
 #define TG_A 1
 #define TG_B 1
 
@@ -166,8 +166,8 @@
 #define COE_H 1.2d0
 
 /* Parameters for the Particle Shifting Technique [Double precision]            */
-/* Shift vector: dr = coe_PS * (1 + 0.2*(W_ij/W_ave)**4) * (dW_ij) * V_j,       */
-/*               where coe_PS = PS_C * U_max * dt * h                           */
+/* Shift vector: dr = - coe_PS * (1 + 0.2*(W_ij/W_ave)**4) * (dW_ij) * V_j,     */
+/*               where coe_PS = PST_C * U_max * dt * h                          */
 #define PST_C 1.5d0
 
 /* Coefficient of the density diffusion term in the EOC [Double precision]      */
@@ -189,7 +189,7 @@
 
 
 /* ============================================================================ */
-/*   12. SPH Discretization Model (Solver)                                      */
+/*   12. SPH Discretization Model                                               */
 /* ============================================================================ */
 /*   Options:                                                                   */
 /*       1 : Classical SPH (sum model)                                          */

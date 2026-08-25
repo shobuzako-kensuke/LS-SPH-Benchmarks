@@ -72,7 +72,7 @@ contains
     (U_BOUNDARY_RIGHT  != 1 && U_BOUNDARY_RIGHT  != 2)
         write(*,*) "+ ======================================================== +"
         write(*,*) "|   Fatal Error in setup:                                  |"
-        write(*,*) "|      - TARGET_PROBLEM: Diffusion equation test           |"
+        write(*,*) "|      - TARGET_PROBLEM: Diffusion Equation Test           |"
         write(*,*) "|      - U_BOUNDARY_* must be 1 or 2.                      |"
         write(*,*) "|      - Please check 'config.h'.                          |"
         write(*,*) "+ ======================================================== +"
@@ -87,7 +87,7 @@ contains
     (U_BOUNDARY_RIGHT  != 1)
         write(*,*) "+ ======================================================== +"
         write(*,*) "|   Fatal Error in setup:                                  |"
-        write(*,*) "|      - TARGET_PROBLEM: Taylor-Green vortex flow          |"
+        write(*,*) "|      - TARGET_PROBLEM: Taylor-Green Vortex               |"
         write(*,*) "|      - U_BOUNDARY_* must be 1.                           |"
         write(*,*) "|      - Please check 'config.h'.                          |"
         write(*,*) "+ ======================================================== +"
@@ -102,7 +102,7 @@ contains
     (U_BOUNDARY_RIGHT  != 2)
         write(*,*) "+ ======================================================== +"
         write(*,*) "|   Fatal Error in setup:                                  |"
-        write(*,*) "|      - TARGET_PROBLEM: Lid-driven cavity flow            |"
+        write(*,*) "|      - TARGET_PROBLEM: Lid-driven Cavity Flow            |"
         write(*,*) "|      - U_BOUNDARY_TOP         must be 3.                 |"
         write(*,*) "|      - All other U_BOUNDARY_* must be 2.                 |"
         write(*,*) "|      - Please check 'config.h'.                          |"
@@ -122,7 +122,7 @@ contains
     (TEM_BOUNDARY_RIGHT  != 2)
         write(*,*) "+ ======================================================== +"
         write(*,*) "|   Fatal Error in setup:                                  |"
-        write(*,*) "|      - TARGET_PROBLEM: Boussinesq convection             |"
+        write(*,*) "|      - TARGET_PROBLEM: Boussinesq Convection             |"
         write(*,*) "|      - U_BOUNDARY_*                  must be 1 or 2.     |"
         write(*,*) "|      - TEM_BOUNDARY_TOP  and _BOTTOM must be 1.          |"
         write(*,*) "|      - TEM_BOUNDARY_LEFT and _RIGHT  must be 2.          |"

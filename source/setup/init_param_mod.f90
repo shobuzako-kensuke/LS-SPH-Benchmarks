@@ -37,7 +37,7 @@ contains
         param%tem_left       = TEM_LEFT
         param%tem_right      = TEM_RIGHT
 
-        ! File & Input/Output Settings
+        ! Input/Output Settings
         param%save_name      = SAVE_NAME
         param%read_name      = READ_NAME
 
@@ -153,7 +153,7 @@ contains
         ! ==================================================================== !
         ! Reynolds number
 #if   (TARGET_PROBLEM == 2)
-        param%Re = 1.0d0       * param%len_x / param%kinematic_vis  ! For Taylor-Green vortex flow
+        param%Re = 1.0d0       * param%len_x / param%kinematic_vis  ! For Taylor-Green vortex
 #else
         param%Re = param%u_top * param%len_x / param%kinematic_vis  ! For lid-driven cavity flow
 #endif

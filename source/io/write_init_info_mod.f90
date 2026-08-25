@@ -37,7 +37,7 @@ contains
 #if   (TARGET_PROBLEM == 1)
         write(*, "(a)")         "   - TARGET_PROBLEM : Diffusion Equation Test"
 #elif (TARGET_PROBLEM == 2)
-        write(*, "(a)")         "   - TARGET_PROBLEM : Taylor-Green Vortex Flow"
+        write(*, "(a)")         "   - TARGET_PROBLEM : Taylor-Green Vortex"
 #elif (TARGET_PROBLEM == 3)
         write(*, "(a)")         "   - TARGET_PROBLEM : Lid-driven Cavity Flow"
 #elif (TARGET_PROBLEM == 4)
@@ -120,7 +120,7 @@ contains
 #if   (TARGET_PROBLEM == 1)
         write(un, "(a)")         "   - TARGET_PROBLEM : Diffusion Equation Test"
 #elif (TARGET_PROBLEM == 2)
-        write(un, "(a)")         "   - TARGET_PROBLEM : Taylor-Green Vortex Flow"
+        write(un, "(a)")         "   - TARGET_PROBLEM : Taylor-Green Vortex"
 #elif (TARGET_PROBLEM == 3)
         write(un, "(a)")         "   - TARGET_PROBLEM : Lid-driven Cavity Flow"
 #elif (TARGET_PROBLEM == 4)

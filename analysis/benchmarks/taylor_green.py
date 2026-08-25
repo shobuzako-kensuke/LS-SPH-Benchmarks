@@ -6,7 +6,7 @@
 #               This program is licensed under the MIT License.                #
 #                                                                              #
 #                              ~~ Description ~~                               #
-#              This module analyzes the Taylor-Green Vortex Flow.              #
+#              This module analyzes the Taylor-Green Vortex.                   #
 #                                                                              #
 # ============================================================================ #
 
@@ -18,7 +18,7 @@ from types import SimpleNamespace
 from analysis.common import read_utils, visualizer, lssph_b
 
 def main(base_dir: Path, param: SimpleNamespace):
-    print("      Analyzing Taylor-Green Vortex Flow : Progress...", end="", flush=True)
+    print("      Analyzing Taylor-Green Vortex : Progress...", end="", flush=True)
 
     # ======================================================================== #
     #   1. Setup parameters
@@ -206,4 +206,4 @@ def main(base_dir: Path, param: SimpleNamespace):
                              f"{Ek_normal  :.14e}", f"{Ek_normal_ex:.14e}",
                              f"{Pc_normal  :.14e}", f"{Pc_normal_ex:.14e}"])
 
-    print("\r      Analyzing Taylor-Green Vortex Flow : Completed     ")
+    print("\r      Analyzing Taylor-Green Vortex : Completed     ")

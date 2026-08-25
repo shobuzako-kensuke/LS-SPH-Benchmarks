@@ -27,7 +27,7 @@ module global_types
         double precision   :: u_top
         double precision   :: tem_top, tem_bottom, tem_left, tem_right
 
-        ! File & Input/Output Settings [ User-defined ]
+        ! Input/Output Settings [ User-defined ]
         character(len=256) :: save_name
         character(len=256) :: read_name
 

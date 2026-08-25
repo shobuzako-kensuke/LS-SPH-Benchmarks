@@ -63,7 +63,7 @@ contains
 
 
     ! ======================================================================== !
-    !   Taylor-Green Vortex Flow
+    !   Taylor-Green Vortex
     ! ======================================================================== !
     subroutine impose_TG_vortex(param, SP)
         type(Param_type), intent(in)    :: param
