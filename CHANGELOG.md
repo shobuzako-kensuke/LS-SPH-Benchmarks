@@ -17,8 +17,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed (不具合修正) -->
 
 
-## [1.0.0](https://github.com/shobuzako-kensuke/LS-SPH-Benchmarks/releases/tag/v1.0.0) - 2026-03-23
+<!-- ## [1.0.0](https://github.com/shobuzako-kensuke/LS-SPH-Benchmarks/releases/tag/v1.0.0) - 2026-03-23 -->
 
+ ## [Unreleased]
 
 ### Added / 新機能
 
@@ -26,9 +27,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Basic analysis scripts in the [analysis/](/analysis/) directory<br>Python解析スクリプトを [analysis/](/analysis/) ディレクトリに格納
   
-- Benchmark test including **Diffusion Equation Test**, **Taylor-Green Vortex Flow**, **Lid-driven Cavity Flow**, and **Boussinesq Convection (Bottom-heated)**<br>ベンチマークテスト (**拡散方程式テスト**, **Taylor-Green渦**, **キャビティ流れ**, **ブシネスク対流**) を実装 
+- Benchmark test including **Diffusion Equation Test**, **Taylor-Green Vortex**, **Lid-driven Cavity Flow**, and **Boussinesq Convection (Bottom-heated)**<br>ベンチマークテスト (**拡散方程式テスト**, **Taylor-Green渦**, **キャビティ流れ**, **ブシネスク対流**) を実装 
 
 - [requirements.txt](/requirements.txt) for virtual environment<br>仮想環境構築に使用する [requirements.txt](/requirements.txt) を追加
+
+- Documentation in [/materials/documents/](/materials/documents/) including the recommended settings for each benchmark test, the guide for [config.h](/config.h), and theoretical manual<br>各ベンチマークテストの推奨設定，[config.h](/config.h) の解説書，理論マニュアル等のドキュメント一式を [/materials/documents/](/materials/documents/) 内に追加
 
 ### Changed / 仕様変更
 
@@ -42,11 +45,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initialization script ([initialize.py](/initialize.py)) to adapt to the new program structure<br>新しいプログラム構造に適合するように初期化スクリプト [initialize.py](/initialize.py) を変更
 
-- [README.md](/README.md) and [README_ja.md](/README_ja.md)<br>[README.md](/README.md) および [README_ja.md](/README_ja.md) を更新
+- Updated [README.md](/README.md) and added Japanese comments<br>[README.md](/README.md) の内容をアップデートし日本語を追加
 
 ### Removed / 機能廃止
 
 - `CONTRIBUTIONS.md`
+- `README_ja.md`
 
 <br>
 
