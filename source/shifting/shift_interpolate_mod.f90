@@ -20,9 +20,9 @@ module shift_interpolate_mod
 
 contains
 
-    subroutine shift_interpolate(me, coe_PST, param, SP, cell)
+    subroutine shift_interpolate(me, coe_PST, max_shift, param, SP, cell)
         integer         , intent(in)    :: me
-        double precision, intent(in)    :: coe_PST
+        double precision, intent(in)    :: coe_PST, max_shift
         type(Param_type), intent(in)    :: param
         type(SP_type)   , intent(inout) :: SP
         type(Cell_type) , intent(in)    :: cell
@@ -219,9 +219,9 @@ contains
         ! Safety guard for maximum shift distance
         r_ij = sqrt(dx**2 + dy**2)
 
-        if (r_ij > 0.2d0*h) then
-            dx = (0.2d0*h) * dx / r_ij
-            dy = (0.2d0*h) * dy / r_ij
+        if (r_ij > max_shift) then
+            dx = max_shift * dx / r_ij
+            dy = max_shift * dy / r_ij
         endif
 
         ! Store the new position into `_old`

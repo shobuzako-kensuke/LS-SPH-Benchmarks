@@ -32,7 +32,7 @@ contains
         type(Cell_type) , intent(inout) :: cell
 
         integer :: me
-        double precision :: U_max, U_tmp, coe_PST, c_sq, rho_ref
+        double precision :: U_max, U_tmp, coe_PST, c_sq, rho_ref, max_shift
 
         U_max = 0.0d0
 
@@ -40,7 +40,7 @@ contains
         rho_ref = param%rho_ref
 
         !$omp parallel default(none) &
-        !$omp shared(param, SP, cell, U_max, coe_PST, c_sq, rho_ref) &
+        !$omp shared(param, SP, cell, U_max, coe_PST, c_sq, rho_ref, max_shift) &
         !$omp private(me, U_tmp)
 
         ! ==================================================================== !
@@ -53,9 +53,10 @@ contains
         enddo
         !$omp enddo
 
-        ! Coefficient of PST
+        ! Coefficient of PST and maximum shift distance
         !$omp single
-        coe_PST = param%PST_c * U_max * param%dt * param%h
+        coe_PST   = param%PST_c * U_max * param%dt * param%h
+        max_shift = U_max * param%dt
         !$omp end single
 
         ! ==================================================================== !
@@ -65,7 +66,7 @@ contains
         do me = 1, SP%num_int
             
 #if (TARGET_PROBLEM <= 4)
-            call shift_interpolate(me, coe_PST, param, SP, cell)  ! No free surface
+            call shift_interpolate(me, coe_PST, max_shift, param, SP, cell)  ! No free surface
 
 #else
             ! メモ：自由表面が存在する場合の計算を書く
