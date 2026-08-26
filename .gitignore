@@ -1,10 +1,11 @@
 # Ignore VSCode settings
 **/.vscode/
 
-# Ignore calculation results, figures, research directories 
+# Ignore calculation results, figures, research, references directories 
 **/figures/
 **/results/
 **/research/
+**/references/
 
 # Ignore build directories and intermediate files
 **/build/
