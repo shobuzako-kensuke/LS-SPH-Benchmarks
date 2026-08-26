@@ -20,7 +20,7 @@ This repository provides various benchmark programs using the <strong>Least-Squa
 
 
 ## Table of Contents <!-- omit in toc -->
-- [🔥 Implemented Benchmark Programs (All 2D) / 実装されているベンチマークテスト (すべて2次元)](#-implemented-benchmark-programs-all-2d--実装されているベンチマークテスト-すべて2次元)
+- [🔥 Implemented Benchmark Programs / 実装されているベンチマークテスト](#-implemented-benchmark-programs--実装されているベンチマークテスト)
 - [⚙️ System Requirements / 動作環境](#️-system-requirements--動作環境)
 - [🖥️ Usage / 使い方](#️-usage--使い方)
   - [1. Download this repository / 本リポジトリの取得](#1-download-this-repository--本リポジトリの取得)
@@ -33,14 +33,18 @@ This repository provides various benchmark programs using the <strong>Least-Squa
 
 <br>
 
-## 🔥 Implemented Benchmark Programs (All 2D) / 実装されているベンチマークテスト (すべて2次元)
+## 🔥 Implemented Benchmark Programs / 実装されているベンチマークテスト
 
-- **Verification**: Comparison with analytical solutions / 解析解との比較
-  - Diffusion Equation Test / 拡散方程式テスト
-  - Taylor–Green Vortex / テイラー・グリーン渦
-- **Validation**: Fluid benchmark tests / 流体ベンチマークテスト
-  - Lid-driven Cavity Flow / キャビティ流れ
-  - Boussinesq Convection (Bottom-heated) / ブシネスク対流 (底面加熱)
+This repository implements the following 2D benchmark tests.  
+以下の2次元ベンチマークテストが実装されています．
+
+
+| Category<br>分類 | Benchmark Tests<br>テスト名 | Description<br>概要 |
+| :--- | :--- | :--- |
+| **Verification**<br>解析解との比較 | Diffusion Equation Test<br>拡散方程式テスト | A problem to obtain the solution of the Poisson equation under appropriate wall boundary conditions as the steady state of the diffusion equation<br>適切な壁境界条件のもとでポアソン方程式の解を拡散方程式の定常解として得る問題 |
+|  | Taylor-Green Vortex<br>テイラー・グリーン渦 | Unsteady flow with decaying vortices under free-slip boundary conditions<br>自由滑り境界条件のもとで渦が減衰する非定常問題 |
+| **Validation**<br>流体ベンチマークテスト | Lid-driven Cavity Flow<br>キャビティ流れ | Internal flow driven by the shear force of a top wall moving at a constant velocity<br>一定速度で移動する上壁のせん断力によって駆動される内部流れ |
+|  | Boussinesq Convection (Bottom-heated)<br>ブシネスク対流（底面加熱） | Thermal convection driven by temperature difference (buoyancy) induced by bottom heating<br>底面加熱による温度差（浮力）で駆動される熱対流 |
 
 
 <!-- | Taylor–Green vortex | Lid-driven cavity flow | Boussinesq convection |
@@ -90,34 +94,37 @@ SPH計算には **Fortran** (Intel Fortran / GNU gfortranに対応)，解析お�
 
 #### English: <!-- omit in toc -->
 
-1. Set up the parameters, including the target problem and the SPH solver, in [config.h](/config.h).
-2. Run `make` to build the Fortran source code.
-3. Run `./start_calculation` to start the calculation.
+1. Set up the parameters, including the target problem and the SPH solver, in [config.h](./config.h).
+2. Open [Makefile](./Makefile) and specify the compiler (`ifx` or `gfortran`)
+3. Run `make` in the root directory to compile the Fortran source code.
+4. Run `./start_calculation` in the root directory to start the calculation.
 
 > [!NOTE]
 > - The calculation results (binary files) are automatically stored in the `results/` directory.
-> - Details on the implemented benchmark tests and recommended parameters are provided in [materials/documents/benchmarks_detail.md](/materials/documents/benchmarks_detail.md).
-> - Details of each parameter in [config.h](config.h) are provided in [materials/documents/config_guide.md](/materials/documents/config_guide.md).
+> - Details on the implemented benchmark tests and recommended parameters are provided in [benchmarks_detail.md](./materials/documents/benchmarks_detail.md).
+> - Details of each parameter in [config.h](./config.h) are provided in [config_guide.md](./materials/documents/config_guide.md).
 
 ---
 
-#### Japanese: <!-- omit in toc -->
+#### 日本語: <!-- omit in toc -->
 
-1. 解く問題，ソルバーの種類，パラメータ値を [config.h](/config.h) で設定してください
-2. ルートディレクトリ上で `make` を実行し，Fortranファイルをコンパイルしてください
-3. ルートディレクトリ上で `./start_calculation` を実行してください（SPH計算が起動します）
+1. 解く問題，ソルバーの種類，パラメータ値を [config.h](./config.h) で設定してください
+2. [Makefile](./Makefile) を開き，コンパイラを指定してください (`ifx` あるいは `gfortran`)
+3. ルートディレクトリ上で `make` を実行し，Fortranファイルをコンパイルしてください
+4. ルートディレクトリ上で `./start_calculation` を実行してください（SPH計算が起動します）
 
 > [!NOTE]
 > - 計算結果（バイナリファイル）は自動的に `results/` ディレクトリに保存されます
-> - 実装されているベンチマークテストおよびパラメータの推奨値は [materials/documents/benchmarks_detail.md](/materials/documents/benchmarks_detail.md) をご参照ください
-> - [config.h](config.h) 内のパラメータの説明は [materials/documents/config_guide.md](/materials/documents/config_guide.md) をご参照ください
+> - 実装されているベンチマークテストおよびパラメータの推奨値は [benchmarks_detail.md](./materials/documents/benchmarks_detail.md) をご参照ください
+> - [config.h](config.h) 内のパラメータの説明は [config_guide.md](./materials/documents/config_guide.md) をご参照ください
 
 <br>
 
 ### 3. Analyze and Visualize the results / 結果の解析と可視化
 
 #### English: <!-- omit in toc -->
-- Before running the analysis script, set up the Python virtual environment and install the required libraries.
+- Before running the analysis script, set up the Python virtual environment and install the required libraries.<br>
+
   1. Create and activate a virtual environment
       ```bash
       python3 -m venv .venv
@@ -128,7 +135,7 @@ SPH計算には **Fortran** (Intel Fortran / GNU gfortranに対応)，解析お�
       pip install --upgrade pip
       pip install -r requirements.txt
       ```
-- Open [analyze.py](/analyze.py), configure the `SAVE_NAME` and other settings, and then run the script:
+- Open [analyze.py](./analyze.py), configure the `SAVE_NAME` and other settings, and then run the script:
     ```bash
     python analyze.py
     ```
@@ -139,19 +146,20 @@ SPH計算には **Fortran** (Intel Fortran / GNU gfortranに対応)，解析お�
 
 ---
 
-#### Japanese: <!-- omit in toc -->
-- Python スクリプトを実行する前に，専用の仮想環境を設定し，必要なライブラリをインストールしてください．
-  1. 仮想環境を作成し，有効化する
+#### 日本語: <!-- omit in toc -->
+- Python スクリプトを実行する前に，専用の仮想環境を設定し，必要なライブラリをインストールしてください．<br>
+
+  1. 仮想環境を作成し，有効化します
       ```bash
       python3 -m venv .venv
       source .venv/bin/activate
       ```
-  2. 依存パッケージ（必要なライブラリ）をインストールする
+  2. 依存パッケージ（必要なライブラリ）をインストールします
       ```bash
       pip install --upgrade pip
       pip install -r requirements.txt
       ```
-- [analyze.py](/analyze.py) の `SAVE_NAME` やその他の変数値を設定し，以下を実行してください
+- 仮想環境が有効化されていることを確認し，[analyze.py](./analyze.py) の `SAVE_NAME` やその他の変数値を設定し，以下を実行してください
     ```bash
     python analyze.py
     ```
@@ -163,16 +171,16 @@ SPH計算には **Fortran** (Intel Fortran / GNU gfortranに対応)，解析お�
 
 ## 📖 Documentation / マニュアル
 
-Detailed guides and theoretical backgrounds are provided in the [materials/documents/](/materials/documents/) directory.<br>
-[materials/documents/](/materials/documents/) ディレクトリ内に以下のマニュアルを用意しています．
+Detailed guides and theoretical backgrounds are provided in the [materials/documents/](./materials/documents/) directory.<br>
+[materials/documents/](./materials/documents/) ディレクトリ内に以下のマニュアルを用意しています．
 
 <br>
 
-- **[benchmarks_detail.md](/materials/documents/benchmarks_detail.md)**: <br>Detailed explanations of the implemented benchmark tests and recommended parameters<br>実装されているベンチマークテストの概要およびパラメータの推奨値
+- [**benchmarks_detail.md**](./materials/documents/benchmarks_detail.md): <br>Detailed explanations of the implemented benchmark tests and recommended parameters<br>実装されているベンチマークテストの概要およびパラメータの推奨値
 
-- **[config_guide.md](/materials/documents/config_guide.md)**: <br>A comprehensive guide on the meaning of each parameter in [config.h](/config.h)<br>設定ファイル ([config.h](/config.h)) 内の各種パラメータの意味
+- [**config_guide.md**](./materials/documents/config_guide.md): <br>A comprehensive guide on the meaning of each parameter in [config.h](/config.h)<br>設定ファイル ([config.h](/config.h)) 内の各種パラメータの意味
 
-- **[theory_manual.pdf](/materials/documents/theory_manual.pdf)**: <br>The theoretical manual detailing the discretization, implemented algorithm, and analytical solutions of benchmarks<br>離散化手法，実装されているアルゴリズム，ベンチマークテストの解析解に関する理論マニュアル
+- [**theory_manual.pdf**](./materials/documents/theory_manual.pdf): <br>The theoretical manual detailing the discretization, implemented algorithm, and analytical solutions of benchmarks<br>離散化手法，実装されているアルゴリズム，ベンチマークテストの解析解に関する理論マニュアル
 
 
 <br>
@@ -262,5 +270,5 @@ Shobuzako, K. (2026). *LS-SPH-Benchmarks* (Version 1.0.0) [Computer software]. Z
 
 ## 🪪 License / ライセンス
 
-This repository is licensed under the [MIT License](LICENSE).<br>
-本リポジトリは [MITライセンス](LICENSE) に準拠しています．
+This repository is licensed under the [MIT License](./LICENSE).<br>
+本リポジトリは [MITライセンス](./LICENSE) に準拠しています．
