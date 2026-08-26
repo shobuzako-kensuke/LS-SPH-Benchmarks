@@ -1,18 +1,19 @@
 # Configuration Guide (`config.h`)
 
-This document provides a comprehensive guide to the parameters defined in [config.h](/config.h).  
-The Fortran code must be recompiled (`make`) after [config.h](/config.h) is changed.
+This document provides a comprehensive guide to the parameters defined in [config.h](../../config.h).  
+The Fortran code must be recompiled (`make`) after [config.h](../../config.h) is changed.
 
-本ドキュメントは [config.h](/config.h) に定義されているパラメータの解説書です．  
-[config.h](/config.h) の内容を変更した場合，必ずFortranコードを再コンパイル（`make`）してください．
+本ドキュメントは [config.h](../../config.h) に定義されているパラメータの解説書です．  
+[config.h](../../config.h) の内容を変更した場合，必ずFortranコードを再コンパイル（`make`）してください．
 
 <br>
 
 > [!NOTE]
-> - For the recommended settings for each benchmark test, see [/materials/documents/benchmarks_detail.md](/materials/documents/benchmarks_detail.md).  
-各ベンチマークテストにおける推奨設定は [/materials/documents/benchmarks_detail.md](/materials/documents/benchmarks_detail.md) をご参照ください．
-> - For mathematical details and references, see [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf).  
-具体的な数式や文献情報は [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf) をご参照ください．
+> - For the recommended settings for each benchmark test, see [benchmarks_detail.md](./benchmarks_detail.md).  
+各ベンチマークテストにおける推奨設定は [benchmarks_detail.md](./enchmarks_detail.md) をご参照ください．
+>
+> - For mathematical details and references, see [theory_manual.pdf](./theory_manual.pdf).  
+具体的な数式や文献情報は [theory_manual.pdf](./theory_manual.pdf) をご参照ください．
 
 
 <br>
@@ -30,8 +31,8 @@ Select the benchmark problem to simulate.
 | **4** | Boussinesq Convection (Bottom-heated) | ブシネスク熱対流（底面加熱） |
 
 > [!NOTE]
-> Parameters in [config.h](/config.h) that are not related to the selected benchmark test will be ignored.  
-> 選択したベンチマークテストに無関係な [config.h](/config.h) 内のパラメータは無視されます．
+> Parameters in [config.h](../../config.h) that are not related to the selected benchmark test will be ignored.  
+> 選択したベンチマークテストに無関係な [config.h](../../config.h) 内のパラメータは無視されます．
 
 <br>
 
@@ -46,6 +47,8 @@ Define the velocity boundary condition for each wall (TOP, BOTTOM, LEFT, RIGHT).
 | **2** | No-slip boundary condition (Dirichlet for the Diffusion Equation Test) | 滑りなし境界条件（拡散方程式テストの場合はディリクレ条件） |
 | **3** | Moving wall boundary condition (constant velocity) <br>*Note*: Option 3 is valid only for the top wall. Set the velocity using `U_TOP`. | 移動壁境界条件（一定速度） <br>*注意*: オプション3は上壁に対してのみ有効です．`U_TOP` で速度を指定してください． |
 
+<br>
+
 ## 3. Temperature Boundary Conditions / 温度境界条件 (`TEM_BOUNDARY_*`)
 
 Define the thermal boundary condition for each wall (TOP, BOTTOM, LEFT, RIGHT).  
@@ -53,7 +56,7 @@ Define the thermal boundary condition for each wall (TOP, BOTTOM, LEFT, RIGHT).
 
 | Value (`TEM_BOUNDARY_*`) | Description (English) | Description (日本語) |
 | :---: | :--- | :--- |
-| **1** | Isothermal boundary condition (constant temperature) <br>*Note*: Set the temperature using `TEM_TOP`, `TEM_BOTTOM`, etc. | 等温境界条件（一定温度）<br>*注意*: `TEM_TOP` や `TEM_BOTTOM` 等で具体的な温度 (K) を指定してください． |
+| **1** | Isothermal boundary condition (constant temperature) <br>*Note*: Set the temperature using `TEM_TOP`, `TEM_BOTTOM`, etc. | 等温境界条件（一定温度）<br>*注意*: `TEM_TOP` や `TEM_BOTTOM` 等で具体的な温度 (K) を指定してください |
 | **2** | Adiabatic boundary condition (zero heat flux) | 断熱境界条件（熱流束ゼロ） |
 
 > [!NOTE]
@@ -75,8 +78,11 @@ Specify the output file name.
 
 > [!NOTE]
 > - To start a new simulation from the first step (no restart), set `READ_NAME "new"` (default).
+> 
 > - To restart a previous simulation, specify the saved target name. (Example: To restart from step 100 of a simulation saved as `SAVE_NAME "Taylor_Green"`, set `READ_NAME "Taylor_Green"` and set the starting step to `START_STEP 100`.)
+> 
 > - 1ステップ目から計算する場合（リスタートしない場合）は，`READ_NAME "new"` としてください（デフォルト設定）  
+> 
 > - 途中から再計算したい場合は，そのファイル名を指定してください（例：`SAVE_NAME "Taylor_Green"` の100ステップ目から再計算したい場合は `READ_NAME "Taylor_Green"` として，後述する計算開始ステップを `START_STEP 100` としてください）
 
 <br>
@@ -108,6 +114,7 @@ Define the domain and the number of particles.
 
 > [!IMPORTANT]
 > When setting a rectangular domain, the ratio of the system lengths must perfectly match the ratio of the number of particles to ensure an isotropic initial particle spacing ($\Delta x = \Delta y$). For example, if `LEN_X = 2.0` and `LEN_Y = 1.0`, you must set `NUM_X` to be exactly twice `NUM_Y`.  
+> 
 > 矩形領域を設定する場合，初期の粒子間隔が等方的 ($\Delta x = \Delta y$) になるように，システム長と粒子数の比率を**必ず一致**させてください．例えば `LEN_X = 2.0`, `LEN_Y = 1.0` とした場合，`NUM_X` は `NUM_Y` の2倍に設定する必要があります．
 
 <br>
@@ -137,12 +144,13 @@ Configure parameters for the time integration scheme (Runge-Kutta method), inclu
 > \Delta t = \min \left( C_ {\mathrm{CFL}} \times \frac{\Delta x}{c/(\zeta \xi)} , \quad C_ {\mathrm{DIF}} \times \frac{(\Delta x)^2}{\nu / \xi^2} , \quad C_ {\mathrm{DIF}} \times \frac{(\Delta x)^2}{\kappa} \right) ,
 > $$
 > 
-> where $C_ {\mathrm{CFL}} =$ `COE_CFL`, $C_ {\mathrm{DIF}} =$ `COE_DIF`, $\Delta x$ is the uniform particle spacing, $c = \sqrt{K/\rho}$ is the speed of sound ($K$ is the bulk modulus and $\rho$ is the density), $\nu$ is the kinematic viscosity, $\kappa$ is the thermal diffusivity, and $\zeta$ and $\xi$ are the relaxation parameters for the Reduced Speed of Sound Technique (RSST) and the Variable Inertial Method (VIM), respectively.  
-> ここで， $C_ {\mathrm{CFL}} =$ `COE_CFL`， $C_ {\mathrm{DIF}} =$ `COE_DIF`， $\Delta x$ は一様配置時における粒子間隔， $c = \sqrt{K/\rho}$ は音速 ($K$は体積弾性率， $\rho$は密度)， $\nu$ は動粘性率， $\kappa$ は熱拡散率， $\zeta, \xi$ はそれぞれ音速低減法 (RSST) および慣性変化法 (VIM) の緩和パラメータを表します．
+> where $C_ {\mathrm{CFL}} =$ `COE_CFL`, $C_ {\mathrm{DIF}} =$ `COE_DIF`, $\Delta x$ is the particle spacing for the initial regular configuration, $c = \sqrt{K/\rho}$ is the speed of sound ($K$ is the bulk modulus and $\rho$ is the density), $\nu$ is the kinematic viscosity, $\kappa$ is the thermal diffusivity, and $\zeta$ and $\xi$ are the relaxation parameters for the Reduced Speed of Sound Technique (RSST) and the Variable Inertial Method (VIM), respectively.  
+> 
+> ここで， $C_ {\mathrm{CFL}} =$ `COE_CFL`， $C_ {\mathrm{DIF}} =$ `COE_DIF`， $\Delta x$ は初期規則配置時における粒子間隔， $c = \sqrt{K/\rho}$ は音速 ($K$は体積弾性率， $\rho$は密度)， $\nu$ は動粘性率， $\kappa$ は熱拡散率， $\zeta, \xi$ はそれぞれ音速低減法 (RSST) および慣性変化法 (VIM) の緩和パラメータを表します．
 
 > [!NOTE]
-> Details of the RSST and VIM are provided in [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf).  
-> RSST および VIM の詳細は [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf) をご参照ください．
+> Details of the RSST and VIM are provided in [theory_manual.pdf](./theory_manual.pdf).  
+> RSST および VIM の詳細は [theory_manual.pdf](./theory_manual.pdf) をご参照ください．
 
 <br>
 
@@ -162,6 +170,7 @@ All physical properties must be defined in SI units.
 
 > [!NOTE]
 > For the Diffusion Equation Test (`TARGET_PROBLEM 1`), all settings except for `RHO_REF` are ignored. In addition, the settings for thermal conductivity (`K_TH_REF`), specific heat (`CP_REF`), and the thermal expansion coefficient (`ALPHA_REF`) are valid only for the thermal convection problem (`TARGET_PROBLEM 4`).  
+> 
 > 拡散方程式テスト(`TARGET_PROBLEM 1`) では，`RHO_REF` 以外の設定が無視されます．また，熱伝導率 (`K_TH_REF`)，比熱 (`CP_REF`)，熱膨張率 (`ALPHA_REF`) の設定は，熱対流計算時 (`TARGET_PROBLEM 4`) のみ有効になります．
 
 <br>
@@ -174,19 +183,20 @@ Specify additional simulation parameters.
 | Parameter | Description (English) | Description (日本語) |
 | :--- | :--- | :--- |
 | `GRAVITY` | Magnitude of the gravitational acceleration (m/s^2) | 重力加速度の大きさ (m/s^2) |
-| `POS_PERT` | Magnitude of the positional perturbation for the Diffusion Equation Test ($0 \leq \mathrm{POS\\_PERT} < 0.5$) | 拡散方程式テストにおける初期粒子配置の摂動の大きさ ($0 \leq \mathrm{POS\\_PERT} < 0.5$) |
+| `POS_PERT` | Magnitude of the positional perturbation for the Diffusion Equation Test ($0 \leq$ `POS_PERT` $< 0.5$) | 拡散方程式テストにおける初期粒子配置の摂動の大きさ ($0 \leq$ `POS_PERT` $< 0.5$) |
 | `TG_A`, `TG_B` | Number of vortices in the X and Y directions of Taylor-Green Vortex | Taylor-Green Vortex におけるX方向およびY方向の渦の数 |
 
 > [!NOTE]
-> The initial particle position $\vec{x}$ for the Diffusion Equation Test is determined by the following equation.  
-> 拡散方程式テストの初期粒子配置 $\vec{x}$ は次式により決定されます．
+> The position $\vec{x} _{i}$ of particle $i$ for the Diffusion Equation Test is determined by the following equation.  
+> 拡散方程式テストにおける粒子 $i$ の位置 $\vec{x}_ {i}$ は次式により決定されます．
 > 
 > $$
-> \vec{x} = \vec{x}_ {0} + (\epsilon \Delta x) \vec{e} ,
+> \vec{x}_ {i} = \vec{x}_ {i,0} + (\epsilon \Delta x) \vec{e} ,
 > $$
 > 
-> where $\vec{x}_ {0}$ is the uniform particle position, $\epsilon =$ `POS_PERT` is the magnitude of the positional perturbation, $\Delta x$ is the uniform particle spacing, and $\vec{e}$ is a 2D random vector whose components range from $-1$ to $1$.  
-> ここで， $\vec{x}_ {0}$ は一様配置時の粒子位置， $\epsilon =$ `POS_PERT` は位置摂動の大きさ， $\Delta x$ は一様配置時の粒子間隔， $\vec{e}$は各要素の値が $-1$ から $1$ の間をランダムに取る2次元ベクトルをそれぞれ表します．
+> where $\vec{x}_ {i,0}$ is its position for the regular configuration , $\epsilon =$ `POS_PERT` is the magnitude of the positional perturbation, $\Delta x$ is the particle spacing for the regular configuration, and $\vec{e}$ is a 2D random vector whose components range from $-1$ to $1$.  
+> 
+> ここで， $\vec{x}_ {i,0}$ は規則配置時における粒子位置， $\epsilon =$ `POS_PERT` は位置摂動の大きさ， $\Delta x$ は規則配置時における粒子間隔， $\vec{e}$ は各要素の値が $-1$ から $1$ の間をランダムに取る2次元ベクトルをそれぞれ表します．
 
 <br>
 
@@ -206,15 +216,16 @@ Define the smoothing length $h$, the shifting coefficient for the Particle Shift
 > 内部領域の粒子シフト $\Delta \vec{x}$ は次式により決定されます．
 > 
 > $$
-> \Delta \vec{x} = - (C_ {\mathrm{PST}} \times U_ {\max} \Delta t) \sum_ {j} h V_ {j} \left\\{ 1 + 0.2 \left(\frac{W(|\boldsymbol{x}_ {ij}|; h)}{W(\Delta x; h)}\right)^4 \right\\} \nabla_ {i} W(|\boldsymbol{x}_ {ij}|; h) ,
+> \Delta \vec{x} = - (C_ {\mathrm{PST}} \times U_ {\max} \Delta t) \sum_ {j} h V_ {j} \left( 1 + 0.2 \left(\frac{W(|\vec{x}_ {ij}|; h)}{W(\Delta x; h)}\right)^4 \right) \nabla_ {i} W(|\vec{x}_ {ij}|; h) ,
 > $$
 > 
-> where $C_ {\mathrm{PST}} =$ `PST_C`, $U_ {\max}$ is the maximum velocity in the system, $\Delta t$ is the time step, $h$ is the smoothing length, $V_ {j}$ is the volume of the neighboring particle $j$, $W(|\vec{x}_ {ij}|; h)$ is the value of the kernel function for the distance between particle $i$ and its neighbor $j$ with the smoothing length $h$, and $\Delta x$ is the uniform particle spacing.  
-> ここで， $C_ {\mathrm{PST}} =$ `PST_C`， $U_ {\max}$ は系の最大速度， $\Delta t$ は時間刻み幅， $h$ はスムージング長， $V_ {j}$ は近傍粒子 $j$ の体積， $W(|\vec{x}_ {ij} |; h)$ は粒子 $i$ と近傍粒子 $j$ の距離および $h$ に関するカーネル関数の値， $\Delta x$ は一様配置時における粒子間隔をそれぞれ表します．
+> where $C_ {\mathrm{PST}} =$ `PST_C`, $U_ {\max}$ is the maximum velocity in the system, $\Delta t$ is the time step, $h$ is the smoothing length, $V_ {j}$ is the volume of the neighboring particle $j$, $W(|\vec{x}_ {ij}|; h)$ is the value of the kernel function for the distance between particle $i$ and its neighbor $j$ with the smoothing length $h$, and $\Delta x$ is the particle spacing for the regular configuration.  
+> 
+> ここで， $C_ {\mathrm{PST}} =$ `PST_C`， $U_ {\max}$ は系の最大速度， $\Delta t$ は時間刻み幅， $h$ はスムージング長， $V_ {j}$ は近傍粒子 $j$ の体積， $W(|\vec{x}_ {ij} |; h)$ は粒子 $i$ と近傍粒子 $j$ の距離および $h$ に関するカーネル関数の値， $\Delta x$ は規則配置時における粒子間隔をそれぞれ表します．
 
 > [!NOTE]
-> Details of the PST and $\delta$-SPH method are provided in [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf).  
-> PST および $\delta$-SPH法の詳細は [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf) をご参照ください．
+> Details of the PST and $\delta$-SPH method are provided in [theory_manual.pdf](./theory_manual.pdf).  
+> PST および $\delta$-SPH法の詳細は [theory_manual.pdf](./theory_manual.pdf) をご参照ください．
  
 <br>
 
@@ -232,8 +243,8 @@ SPH計算で用いるカーネル関数を指定します．
 | **5** | Wendland $C^6$ kernel | Wendland $C^6$ カーネル |
 
 > [!NOTE]
-> See [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf) for the mathematical details.  
-> 式の詳細は [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf) をご参照ください．
+> See [theory_manual.pdf](./theory_manual.pdf) for the mathematical details.  
+> 式の詳細は [theory_manual.pdf](./theory_manual.pdf) をご参照ください．
 
 <br>
 
@@ -252,8 +263,8 @@ SPH計算における空間離散化手法を指定します．
 | **6** | LS-SPH (5th-order Taylor expansion) | 最小二乗SPH（5次テイラー展開） |
 
 > [!NOTE]
-> See [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf) for the mathematical details.  
-> 式の詳細は [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf) をご参照ください．
+> See [theory_manual.pdf](./theory_manual.pdf) for the mathematical details.  
+> 式の詳細は [theory_manual.pdf](./theory_manual.pdf) をご参照ください．
 
 
 <br>
@@ -270,5 +281,5 @@ SPH計算における壁境界モデルを指定します．
 | **3** | Fixed ghost particle scheme (3rd-order interpolation) | 固定ゴースト粒子法（3次精度内挿） |
 
 > [!NOTE]
-> See [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf) for the mathematical details.  
-> 式の詳細は [/materials/documents/theory_manual.pdf](/materials/documents/theory_manual.pdf) をご参照ください．
+> See [theory_manual.pdf](./theory_manual.pdf) for the mathematical details.  
+> 式の詳細は [theory_manual.pdf](./theory_manual.pdf) をご参照ください．
