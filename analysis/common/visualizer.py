@@ -62,8 +62,12 @@ def get_domain_settings(param: SimpleNamespace) -> dict:
 
     if target in [1,2,3,4]:
 
-        # Characteristic length Ly
-        L_ref = param.len_y if target != 1 else 1.0
+        if target == 1:
+            L_ref = 1.0
+        elif target in [2,3]:
+            L_ref = param.len_x
+        elif target == 4:
+            L_ref = param.len_y
 
         # Scaled domain limits
         x_min = 0.0
@@ -104,7 +108,7 @@ def get_time_settings(param: SimpleNamespace) -> dict:
     # Taylor-Green vortex or Lid-driven cavity flow
     elif target in [2,3]:
         U_ref = 1.0 if target == 2 else param.u_top
-        return {"scale": param.len_y / U_ref, "label": r"Time $t^{*}$"}
+        return {"scale": param.len_x / U_ref, "label": r"Time $t^{*}$"}
     
     # Boussinesq convection
     elif target == 4:
